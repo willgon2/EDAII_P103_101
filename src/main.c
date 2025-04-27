@@ -1,5 +1,7 @@
+#include "document.h"
 #include "linked.h"
 #include "sample_lib.h"
+
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,13 +23,6 @@ int main() {
 
   LinkedList my_list;
   initialize_list(&my_list);
-
-  insert(&my_list, 10);
-  insert(&my_list, 20);
-  insert(&my_list, 30);
-  insert(&my_list, 40);
-
-  show_list(my_list);
 
   return 0;
 }

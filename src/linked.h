@@ -25,5 +25,6 @@ Node *create_node(int value);
 void insert(LinkedList *l, int value);
 void show_list(LinkedList l);
 void initialize_list(LinkedList *l);
+void delete(LinkedList *l, int index);
 
 #endif

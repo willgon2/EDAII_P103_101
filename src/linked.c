@@ -37,3 +37,40 @@ void show_list(LinkedList l) {
     node = node->next;
   } while (node != NULL);
 }
+
+void delete(LinkedList *l, int item_index) {
+  int i = 0;
+  Node *node = l->head;
+
+  while (i != item_index && node != NULL) {
+    node = node->next;
+    i += 1;
+  }
+
+  if (node == NULL) {
+    printf("List index out of range!!\n");
+    return;
+  }
+
+  Node *prev = node->prev, *next = node->next;
+
+  if (prev == NULL && next == NULL) {
+    initialize_list(l);
+  }
+
+  if (prev != NULL) {
+    prev->next = next;
+    if (node == l->tail) {
+      l->tail = prev;
+    }
+  }
+
+  if (next != NULL) {
+    next->prev = prev;
+    if (node == l->head) {
+      l->head = next;
+    }
+  }
+
+  free(node);
+}

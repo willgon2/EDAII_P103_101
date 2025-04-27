@@ -2,9 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node_struct{
+typedef struct Node{
     int value;
     struct Node* next;
-};
-
-typedef struct Node_struct Node;
+    struct Node* prev;
+} Node;

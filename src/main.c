@@ -1,5 +1,6 @@
 #include "document.h"
 #include "linked.h"
+#include "search.h"
 #include "sample_lib.h"
 
 #include <dirent.h>
@@ -21,8 +22,7 @@ int main() {
   // uncomment and run "make v" to see how valgrind detects memory leaks
   // createaleak();
 
-  LinkedList my_list;
-  initialize_list(&my_list);
+  get_files("datasets/wikipedia12");
 
   return 0;
 }

@@ -1,6 +1,11 @@
 {
     "files.eol": "\n",
     "files.associations": {
-        "linked.h": "c"
+        "linked.h": "c",
+        "document.h": "c",
+        "deque": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c"
     },
 }

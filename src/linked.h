@@ -5,26 +5,37 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define Query LinkedList
 #define Stack LinkedList
 
-typedef struct Node {
-  int value;
-  struct Node *next;
-  struct Node *prev;
+typedef enum {
+  INTEGER,
+  STRING
+} DataType;
+
+typedef struct _Node {
+  void* value;
+  struct _Node *next;
+  struct _Node *prev;
 } Node;
 
 typedef struct {
   Node *head;
   Node *tail;
   bool is_empty;
+  DataType type_of_variable;
 } LinkedList;
 
-Node *create_node(int value);
-void insert(LinkedList *l, int value);
+Node *create_node(void *value, DataType dt);
+void insert(LinkedList *l, void* value);
+void append(LinkedList *l, void* value);
 void show_list(LinkedList l);
-void initialize_list(LinkedList *l);
+void initialize_list(LinkedList *l, DataType dt);
+
+Node *get_node(LinkedList l, int index);
+int get_item(LinkedList l, int index);
 void delete(LinkedList *l, int index);
 
 #endif

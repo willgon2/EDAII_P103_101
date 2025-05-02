@@ -1,10 +1,21 @@
 #include "linked.h"
 
-Node *create_node(int value) {
+Node *create_node(void* value, DataType dt) {
   Node *n = malloc(sizeof(Node));
-  n->value = value;
   n->next = NULL;
   n->prev = NULL;
+
+  if (dt == INTEGER) {
+    int *p_value = malloc(sizeof(int));
+  } else if (dt == STRING) {
+    char *text[] = malloc(strlen(value) * sizeof(char));
+    for (int i = 0; i < strlen(value); i++) {
+      (*text)[i] = value[i];
+    }
+  } else {
+    printf("The datatype introduced is not available\n");
+    exit(1);
+  }
 
   return n;
 }
@@ -29,6 +40,20 @@ void insert(LinkedList *l, int value) {
   }
 }
 
+void append(LinkedList *l, int value) {
+  Node *new_node = create_node(value);
+
+  if (l->is_empty) {
+    l->head = new_node;
+    l->tail = new_node;
+    l->is_empty = false;
+  } else{
+    new_node->prev = l->tail;
+    (l->tail)->next = new_node;
+    l->tail = new_node;
+  }
+}
+
 void show_list(LinkedList l) {
   Node *node = l.head;
 
@@ -38,14 +63,35 @@ void show_list(LinkedList l) {
   } while (node != NULL);
 }
 
-void delete(LinkedList *l, int item_index) {
+Node *get_node(LinkedList l, int index) {
   int i = 0;
-  Node *node = l->head;
+  Node *node = l.head;
 
-  while (i != item_index && node != NULL) {
+  while (i != index && node != NULL) {
     node = node->next;
     i += 1;
   }
+
+  if (node == NULL) {
+    return NULL;
+  } else {
+    return node;
+  }
+}
+
+int get_item(LinkedList l, int index) {
+  Node *node = get_node(l, index);
+
+  if (node != NULL) {
+    return node->value;
+  } else {
+    printf("List index out of range!!");
+    exit(1);
+  }
+}
+
+void delete(LinkedList *l, int item_index) {
+  Node *node = get_node(*l, item_index);
 
   if (node == NULL) {
     printf("List index out of range!!\n");

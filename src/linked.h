@@ -35,7 +35,7 @@ void show_list(LinkedList l);
 void initialize_list(LinkedList *l, DataType dt);
 
 Node *get_node(LinkedList l, int index);
-int get_item(LinkedList l, int index);
+void * get_item(LinkedList l, int index);
 void delete(LinkedList *l, int index);
 
 #endif

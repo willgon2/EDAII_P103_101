@@ -5,5 +5,4 @@
 #include <string.h>
 #include "linked.h"
 
-
 #endif

@@ -6,12 +6,22 @@ Node *create_node(void* value, DataType dt) {
   n->prev = NULL;
 
   if (dt == INTEGER) {
+
     int *p_value = malloc(sizeof(int));
+    *p_value = *(int*)value;
+    
+    n->value = p_value;
+
   } else if (dt == STRING) {
-    char *text[] = malloc(strlen(value) * sizeof(char));
-    for (int i = 0; i < strlen(value); i++) {
-      (*text)[i] = value[i];
+    int leangth_text = (int)strlen((char*)value);
+    char *text = malloc((leangth_text+1) * sizeof(char));
+
+    for (int i = 0; i < leangth_text; i++) {
+      text[i] = ((char*)value)[i];
     }
+
+    n->value = text;
+
   } else {
     printf("The datatype introduced is not available\n");
     exit(1);
@@ -20,14 +30,15 @@ Node *create_node(void* value, DataType dt) {
   return n;
 }
 
-void initialize_list(LinkedList *l) {
+void initialize_list(LinkedList *l, DataType dt) {
   l->head = NULL;
   l->tail = NULL;
   l->is_empty = true;
+  l->type_of_variable = dt;
 }
 
-void insert(LinkedList *l, int value) {
-  Node *new_node = create_node(value);
+void insert(LinkedList *l, void *value) {
+  Node *new_node = create_node(value, l->type_of_variable);
 
   if (l->is_empty) {
     l->head = new_node;
@@ -40,8 +51,8 @@ void insert(LinkedList *l, int value) {
   }
 }
 
-void append(LinkedList *l, int value) {
-  Node *new_node = create_node(value);
+void append(LinkedList *l, void *value) {
+  Node *new_node = create_node(value, l->type_of_variable);
 
   if (l->is_empty) {
     l->head = new_node;
@@ -57,10 +68,14 @@ void append(LinkedList *l, int value) {
 void show_list(LinkedList l) {
   Node *node = l.head;
 
-  do {
-    printf("Found node with value %d\n", node->value);
+  while (node != NULL) {
+    if (l.type_of_variable == INTEGER) {
+      printf("Found node with value %d\n", *(int*)node->value);
+    } else if (l.type_of_variable == STRING) {
+      printf("Found node with value %s\n", (char*)node->value);
+    }
     node = node->next;
-  } while (node != NULL);
+  };
 }
 
 Node *get_node(LinkedList l, int index) {
@@ -79,7 +94,7 @@ Node *get_node(LinkedList l, int index) {
   }
 }
 
-int get_item(LinkedList l, int index) {
+void * get_item(LinkedList l, int index) {
   Node *node = get_node(l, index);
 
   if (node != NULL) {
@@ -95,13 +110,13 @@ void delete(LinkedList *l, int item_index) {
 
   if (node == NULL) {
     printf("List index out of range!!\n");
-    return;
+    exit(1);
   }
 
   Node *prev = node->prev, *next = node->next;
 
   if (prev == NULL && next == NULL) {
-    initialize_list(l);
+    initialize_list(l, l->type_of_variable);
   }
 
   if (prev != NULL) {
@@ -110,6 +125,7 @@ void delete(LinkedList *l, int item_index) {
       l->tail = prev;
     }
   }
+
 
   if (next != NULL) {
     next->prev = prev;

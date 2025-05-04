@@ -2,10 +2,7 @@
 #define LINKED_LIB_H
 
 #include "linked.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "common.h"
 
 #define Query LinkedList
 #define Stack LinkedList

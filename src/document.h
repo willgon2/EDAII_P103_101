@@ -1,9 +1,7 @@
 #ifndef DOCUMENT_LIB_H
 #define DOCUMENT_LIB_H
 
-#include <dirent.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "common.h"
 #include "linked.h"
 
 typedef struct {
@@ -12,6 +10,22 @@ typedef struct {
     char *body;
 } Document;
 
-void get_files(char *directory);
+typedef enum {
+    WIKIPEDIA12 = 0,
+    WIKIPEDIA270,
+    WIKIPEDIA540,
+    WIKIPEDIA5400
+} Dataset;
+
+typedef struct {
+    Dataset ds;
+    char *path;
+    int nr_documents;
+} DatasetInfo;
+
+
+void start_database();
+void add_dataset(Dataset ds, char *path, int nr_documents);
+void get_files(Dataset ds);
 
 #endif

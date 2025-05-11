@@ -5,27 +5,29 @@
 #include "linked.h"
 
 typedef struct {
-    char *title;
-    int DocumentId;
-    char *body;
+  char *filepath;
+  char *title;
+  int DocumentId;
+  char *body;
 } Document;
 
 typedef enum {
-    WIKIPEDIA12 = 0,
-    WIKIPEDIA270,
-    WIKIPEDIA540,
-    WIKIPEDIA5400
+  WIKIPEDIA12 = 0,
+  WIKIPEDIA270,
+  WIKIPEDIA540,
+  WIKIPEDIA5400
 } Dataset;
 
 typedef struct {
-    Dataset ds;
-    char *path;
-    int nr_documents;
+  Dataset ds;
+  char *path;
+  int nr_documents;
 } DatasetInfo;
-
 
 void start_database();
 void add_dataset(Dataset ds, char *path, int nr_documents);
-void get_files(Dataset ds);
+LinkedList *get_files(Dataset ds);
+
+void get_document(Document *d, char *filepath, int ID);
 
 #endif

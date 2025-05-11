@@ -9,7 +9,7 @@ r:
 
 v: 
 	make compile
-	valgrind --leak-check=yes ./main.out
+	valgrind --leak-check=yes --track-origins=yes ./main.out
 
 compiledebug:
 	gcc src/main.c $(SRC_FILES) -g -o main.out
@@ -18,6 +18,9 @@ d:
 	make compiledebug
 	gdb ./main.out
 
+v: 
+	make compiledebug
+	valgrind --leak-check=yes --track-origins=yes ./main.out
 
 compiletest:
 	gcc -Wall -Wextra -Werror test/test.c test/utils.c $(SRC_FILES) -o test.out

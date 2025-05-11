@@ -1,32 +1,67 @@
 #include "linked.h"
+#include "document.h"
 
-Node *create_node(void* value, DataType dt) {
+char *copy_str(char *old_str) {
+  int length = (int)strlen(old_str) + 1;
+  char *new_str = malloc(length * sizeof(char));
+  memset(new_str, 0, length);
+
+  for (int i = 0; i < length - 1; i++) {
+    new_str[i] = old_str[i];
+  }
+
+  new_str[length - 1] = '\0';
+
+  return new_str;
+}
+
+int get_length(LinkedList l) {
+  if (l.is_empty == true) {
+    return 0;
+  }
+
+  int i = 0;
+  Node *node = l.head;
+
+  while (node != l.tail) {
+    i++;
+    node = node->next;
+  }
+
+  return i;
+}
+
+Node *create_node(void *value, DataType dt) {
   Node *n = malloc(sizeof(Node));
   n->next = NULL;
   n->prev = NULL;
 
-  if (dt == INTEGER) {
-
+  switch (dt) {
+  case INTEGER:
     int *p_value = malloc(sizeof(int));
-    *p_value = *(int*)value;
-    
+    *p_value = *(int *)value;
+
     n->value = p_value;
+    break;
 
-  } else if (dt == STRING) {
-    int leangth_text = (int)strlen((char*)value);
-    char *text = malloc((leangth_text+1) * sizeof(char));
-
-    for (int i = 0; i < leangth_text; i++) {
-      text[i] = ((char*)value)[i];
-    }
+  case STRING:
+    char *text = copy_str((char *)value);
 
     n->value = text;
+    break;
 
-  } else {
+  case DOCUMENT_STR:
+    Document *p_document = malloc(sizeof(Document));
+    *p_document = *(Document *)value;
+
+    n->value = p_document;
+    break;
+
+  default:
     printf("The datatype introduced is not available\n");
     exit(1);
+    break;
   }
-
   return n;
 }
 
@@ -37,7 +72,7 @@ void initialize_list(LinkedList *l, DataType dt) {
   l->type_of_variable = dt;
 }
 
-void insert(LinkedList *l, void *value) {
+void push(LinkedList *l, void *value) {
   Node *new_node = create_node(value, l->type_of_variable);
 
   if (l->is_empty) {
@@ -58,7 +93,7 @@ void append(LinkedList *l, void *value) {
     l->head = new_node;
     l->tail = new_node;
     l->is_empty = false;
-  } else{
+  } else {
     new_node->prev = l->tail;
     (l->tail)->next = new_node;
     l->tail = new_node;
@@ -69,10 +104,20 @@ void show_list(LinkedList l) {
   Node *node = l.head;
 
   while (node != NULL) {
-    if (l.type_of_variable == INTEGER) {
-      printf("Found node with value %d\n", *(int*)node->value);
-    } else if (l.type_of_variable == STRING) {
-      printf("Found node with value %s\n", (char*)node->value);
+    switch (l.type_of_variable) {
+    case INTEGER:
+      printf("Found node with value %d\n", *(int *)node->value);
+      break;
+    case STRING:
+      printf("Found node with value %s\n", (char *)node->value);
+      break;
+    case DOCUMENT_STR:
+      printf("Found document with filepath %s\n",
+             ((Document *)node->value)->filepath);
+      break;
+    default:
+      printf("Error: Data type not found!!\n");
+      exit(1);
     }
     node = node->next;
   };
@@ -94,7 +139,7 @@ Node *get_node(LinkedList l, int index) {
   }
 }
 
-void * get_item(LinkedList l, int index) {
+void *get_item(LinkedList l, int index) {
   Node *node = get_node(l, index);
 
   if (node != NULL) {
@@ -125,7 +170,6 @@ void delete(LinkedList *l, int item_index) {
       l->tail = prev;
     }
   }
-
 
   if (next != NULL) {
     next->prev = prev;

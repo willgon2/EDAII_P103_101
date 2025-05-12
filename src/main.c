@@ -40,7 +40,6 @@ int main() {
   printf("Document ID: %d\n", document->DocumentId);
   printf("Title: %s\n", document->title);
   printf("Body:\n %s\n", document->body);
-  
 
   free(files);
   return 0;

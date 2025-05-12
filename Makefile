@@ -7,10 +7,6 @@ r:
 	make compile
 	./main.out
 
-v: 
-	make compile
-	valgrind --leak-check=yes --track-origins=yes ./main.out
-
 compiledebug:
 	gcc src/main.c $(SRC_FILES) -g -o main.out
 

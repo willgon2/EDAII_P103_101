@@ -28,6 +28,8 @@ void start_database();
 void add_dataset(Dataset ds, char *path, int nr_documents);
 LinkedList *get_files(Dataset ds);
 
-void get_document(Document *d, char *filepath, int ID);
+void read_document(Document *d, char *filepath, int ID);
+void print_document(Document *d);
+void free_database();
 
 #endif

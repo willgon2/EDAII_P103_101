@@ -11,7 +11,6 @@ void createaleak() {
 
 int main() {
   printf("*****************\nWelcome to EDA 2!\n*****************\n");
-  start_database();
 
   // how to import and call a function
   // printf("Factorial of 4 is %d\n", fact(4));
@@ -19,28 +18,20 @@ int main() {
   // uncomment and run "make v" to see how valgrind detects memory leaks
   // createaleak();
 
+  start_database();
+
   LinkedList *files = get_files(WIKIPEDIA540);
   show_list(*files);
 
-  /*
-  int test_id = 1;
-  char *filepath = (char*)get_item(*files, test_id);
+  LinkedList document_title;
+  initialize_list(&document_title, STRING);
 
-  Document d;
-  d.DocumentId = test_id;
+  Document *d = linear_search_title(*files, "Aging in cats");
 
-  get_document(&d, filepath);
-  */
+  print_document(d);
 
-  printf("Pick a document [0-%d]: ", get_length(*files));
-  int choice;
-  scanf("%d", &choice);
+  free_list(files);
+  free_database();
 
-  Document *document = get_item(*files, choice);
-  printf("Document ID: %d\n", document->DocumentId);
-  printf("Title: %s\n", document->title);
-  printf("Body:\n %s\n", document->body);
-
-  free(files);
   return 0;
 }

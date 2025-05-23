@@ -33,5 +33,6 @@ Node *get_node(LinkedList l, int index);
 void *get_item(LinkedList l, int index);
 void delete(LinkedList *l, int index);
 int get_length(LinkedList l);
+void free_list(LinkedList *l);
 
 #endif

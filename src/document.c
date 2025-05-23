@@ -1,6 +1,7 @@
 #include "document.h"
+#define NUM_DATASETS 4
 
-DatasetInfo database[4];
+DatasetInfo database[NUM_DATASETS];
 
 void start_database() {
   add_dataset(WIKIPEDIA12, "datasets/wikipedia12", 12);
@@ -17,6 +18,7 @@ void add_dataset(Dataset ds, char *path, int nr_documents) {
 }
 
 LinkedList *get_files(Dataset ds) {
+  printf("Initializing list with dataset %s\n", database[ds].path);
   DatasetInfo *ds_chosen = &database[ds];
   DIR *dr = opendir(ds_chosen->path);
 
@@ -34,64 +36,76 @@ LinkedList *get_files(Dataset ds) {
     snprintf(file_path, sizeof(file_path), "%s/%d.txt", ds_chosen->path, i);
 
     if (access(file_path, F_OK) == 0) {
-      get_document(aux_document, file_path, i);
+      read_document(aux_document, file_path, i);
       append(documents, aux_document);
     }
   }
 
+  free(aux_document);
   closedir(dr);
 
   return documents;
 }
 
-void get_document(Document *d, char *filepath, int ID) {
+void read_document(Document *d, char *filepath, int ID) {
+  printf("Reading document with ID %d\n", ID);
   d->filepath = copy_str(filepath);
   d->DocumentId = ID;
 
   FILE *f = fopen(d->filepath, "r");
 
-  // skip the DocumentID since we already know it
+  int initial_length = 100;
   char c;
-  while ((c = fgetc(f)) != EOF && c != '\n') {
-    continue;
-  }
+  char *pointers[] = {
+      NULL,                       // since the id is already made skip this part
+      malloc(initial_length + 1), // for the title
+      malloc(initial_length + 1)  // for the body
+  };
 
-  int length = 100, i = 0;
-  char *aux_string = malloc(length);
-  memset(aux_string, 0, length);
+  for (int p = 0; p < 3; p++) {
+    int length = initial_length, i = 0;
 
-  while ((c = fgetc(f)) != EOF && c != '\n') {
-    if ((int)strlen(aux_string) >= length - 1) {
-      length += 100;
-      aux_string = realloc(aux_string, length * sizeof(char));
+    while ((c = fgetc(f)) != EOF) {
+      // for the title and the index we pass when we find a single \n
+      if (c == '\n' && p != 2) {
+        break;
+      }
+
+      // for the first pointer we don't store nothing
+      if (pointers[p] == NULL) {
+        continue;
+      }
+
+      if (i >= length) {
+        length += initial_length;
+        pointers[p] = realloc(pointers[p], length + 1);
+      }
+
+      pointers[p][i] = c;
+      i++;
     }
 
-    aux_string[i] = c;
-    i++;
+    if (pointers[p] != NULL)
+      pointers[p][i] = '\0';
   }
 
-  aux_string[length - 1] = '\0';
+  d->title = copy_str(pointers[1]);
+  d->body = copy_str(pointers[2]);
 
-  d->title = copy_str(aux_string);
+  fclose(f);
 
-  length = 100;
-  i = 0;
-  aux_string = realloc(aux_string, length * sizeof(char));
-  memset(aux_string, 0, length);
+  free(pointers[1]);
+  free(pointers[2]);
+}
 
-  while ((c = fgetc(f)) != EOF) {
-    if ((int)strlen(aux_string) >= length - 1) {
-      length += 100;
-      aux_string = realloc(aux_string, length * sizeof(char));
-    }
+void print_document(Document *d) {
+  printf("Document ID: %d\n", d->DocumentId);
+  printf("Document Title: %s\n", d->title);
+  printf("Document Body: \n%s\n", d->body);
+}
 
-    aux_string[i] = c;
-    i++;
+void free_database() {
+  for (int i = 0; i < NUM_DATASETS; i++) {
+    free(database[i].path);
   }
-
-  d->body = copy_str(aux_string);
-
-  free(aux_string);
-
-  printf("Starting document with id %d \n", ID);
 }

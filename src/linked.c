@@ -37,25 +37,28 @@ Node *create_node(void *value, DataType dt) {
   n->prev = NULL;
 
   switch (dt) {
-  case INTEGER:
+  case INTEGER: {
     int *p_value = malloc(sizeof(int));
     *p_value = *(int *)value;
 
     n->value = p_value;
     break;
+  }
 
-  case STRING:
+  case STRING: {
     char *text = copy_str((char *)value);
 
     n->value = text;
     break;
+  }
 
-  case DOCUMENT_STR:
+  case DOCUMENT_STR: {
     Document *p_document = malloc(sizeof(Document));
     *p_document = *(Document *)value;
 
     n->value = p_document;
     break;
+  }
 
   default:
     printf("The datatype introduced is not available\n");

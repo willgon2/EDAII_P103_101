@@ -191,6 +191,36 @@ void delete(LinkedList *l, int item_index) {
   free(node);
 }
 
+bool in_list(LinkedList l, void *value) {
+  Node *n = l.head;
+  while (n != NULL) {
+    if (l.type_of_variable == INTEGER) {
+      int *node_value = (int *)n->value, *value_int = (int *)value;
+      if (*node_value == *value_int) {
+        return true;
+      }
+    } else if (l.type_of_variable == STRING) {
+      if (strcmp((char *)n->value, (char *)value) == 0) {
+        return true;
+      }
+    } else if (l.type_of_variable == DOCUMENT_STR) {
+      Document *d = (Document *)n->value, *value_d = (Document *)value;
+      if (d->DocumentId == value_d->DocumentId &&
+          strcmp(d->filepath, value_d->filepath) == 0) {
+        return true;
+      }
+    } else {
+      printf("The type of variable was not found!\n");
+      exit(0);
+    }
+    n = n->next;
+  }
+  return false;
+}
+
+
+
+
 void free_list(LinkedList *l) {
   while (!l->is_empty) {
     delete (l, 0);

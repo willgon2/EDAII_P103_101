@@ -4,7 +4,7 @@
 #include "common.h"
 #include "linked.h"
 
-typedef struct {
+typedef struct Document {
   char *filepath;
   char *title;
   int DocumentId;
@@ -18,7 +18,7 @@ typedef enum {
   WIKIPEDIA5400
 } Dataset;
 
-typedef struct {
+typedef struct DatasetInfo {
   Dataset ds;
   char *path;
   int nr_documents;

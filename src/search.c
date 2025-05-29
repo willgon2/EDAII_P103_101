@@ -16,4 +16,4 @@ Document *linear_search_title(LinkedList documents, char *title) {
   }
 
   return d;
-}
+} 

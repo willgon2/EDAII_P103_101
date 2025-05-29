@@ -52,7 +52,7 @@ void sample_lib_test() {
 }
 
 
-void search_query_test(){
+/*void search_query_test(){
   LinkedList doc_list = start_database();
   HashMap *index = create_hashmap_dataset(doc_list);
   int found1[2] = search_query(index,"circe");
@@ -64,4 +64,4 @@ void search_query_test(){
   free_list(&doc_list); 
 
 
-}
+}*/

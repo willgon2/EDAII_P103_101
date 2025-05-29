@@ -1,6 +1,4 @@
 #include "hashmap.h"
-#include "linked.h"
-#include <stdbool.h>
 
 void initialize_hashmap(HashMap *h) {
   h->size = 0;
@@ -201,5 +199,3 @@ HashMap *create_hashmap_dataset(LinkedList documents) {
   print_hashmap(*h);
   return h;
 }
-
-

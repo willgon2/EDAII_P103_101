@@ -1,7 +1,6 @@
 #ifndef HASHMAP_LIB_H
 #define HASHMAP_LIB_H
 
-#include <stdint.h>
 #include "common.h"
 #include "document.h"
 #include "linked.h"

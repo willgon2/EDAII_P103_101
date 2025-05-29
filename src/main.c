@@ -1,5 +1,6 @@
 #include "common.h"
 #include "document.h"
+#include "hashmap.h"
 #include "linked.h"
 #include "sample_lib.h"
 #include "search.h"
@@ -26,11 +27,11 @@ int main() {
   LinkedList document_title;
   initialize_list(&document_title, STRING);
 
-  Document *d = linear_search_title(*files, "Aging in cats");
-
-  print_document(d);
+  HashMap *h = create_hashmap_dataset(*files);
 
   free_list(files);
+  free(files);
+  free_hashmap(h);
   free_database();
 
   return 0;

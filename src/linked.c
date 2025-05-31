@@ -37,28 +37,32 @@ Node *create_node(void *value, DataType dt) {
   n->prev = NULL;
 
   switch (dt) {
-  case INTEGER: {
+  case INTEGER:
     int *p_value = malloc(sizeof(int));
     *p_value = *(int *)value;
 
     n->value = p_value;
     break;
-  }
 
-  case STRING: {
+  case STRING:
     char *text = copy_str((char *)value);
 
     n->value = text;
     break;
-  }
 
-  case DOCUMENT_STR: {
+  case DOCUMENT_STR:
     Document *p_document = malloc(sizeof(Document));
     *p_document = *(Document *)value;
 
     n->value = p_document;
     break;
-  }
+
+  case DOCUMENT_LINK:
+    DocumentLink *l = malloc(sizeof(DocumentLink));
+    *l = *(DocumentLink *)value;
+
+    n->value = l;
+    break;
 
   default:
     printf("The datatype introduced is not available\n");
@@ -117,6 +121,12 @@ void show_list(LinkedList l) {
     case DOCUMENT_STR:
       printf("Found document with filepath %s\n",
              ((Document *)node->value)->filepath);
+      printf("Links: ");
+      show_list(*((Document *)node->value)->links);
+      printf("\n");
+      break;
+    case DOCUMENT_LINK:
+      printf("%d ", ((DocumentLink *)node->value)->documentID);
       break;
     default:
       printf("Error: Data type not found!!\n");
@@ -185,6 +195,16 @@ void delete(LinkedList *l, int item_index) {
     free(((Document *)node->value)->filepath);
     free(((Document *)node->value)->body);
     free(((Document *)node->value)->title);
+    free_list(((Document *)node->value)->links);
+    free(((Document *)node->value)->links);
+  } else if (l->type_of_variable == DOCUMENT_LINK) {
+    free(((DocumentLink *)node->value)->title);
+  }
+
+  // for debugging 
+
+  if (l->type_of_variable == STRING) {
+    printf("Deliting the string %s\n", (char *)node->value);
   }
 
   free(node->value);
@@ -209,22 +229,24 @@ bool in_list(LinkedList l, void *value) {
           strcmp(d->filepath, value_d->filepath) == 0) {
         return true;
       }
+    } else if (l.type_of_variable == DOCUMENT_LINK) {
+      DocumentLink *l = (DocumentLink *)n->value,
+                   *l_value = (DocumentLink *)value;
+      if (l->documentID == l_value->documentID) {
+        return true;
+      }
     } else {
       printf("The type of variable was not found!\n");
       exit(0);
     }
     n = n->next;
   }
+
   return false;
 }
-
-
-
 
 void free_list(LinkedList *l) {
   while (!l->is_empty) {
     delete (l, 0);
   }
-
-  free(l);
 }

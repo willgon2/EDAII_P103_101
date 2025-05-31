@@ -1,54 +1,67 @@
 #include "graph.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <regex.h>
 
-DocumentGraph *create_document_graph(LinkedList *documents) {
-  int n = get_length(*documents);
-  DocumentGraph *graph = malloc(sizeof(DocumentGraph));
-  graph->num_nodes = n;
-  graph->edges = malloc(n * sizeof(LinkedList *));
+LinkNode *create_score_graph(LinkedList *d) {
+  int memory_graph = sizeof(LinkNode) * (ds_chosen->nr_documents + 1);
+  LinkNode *graph = malloc(memory_graph);
+  memset(graph, 0, memory_graph);
 
-  for (int i = 0; i < n; i++) {
-    graph->edges[i] = malloc(sizeof(LinkedList));
-    initialize_list(graph->edges[i], INTEGER);
+  for (int i = 0; i < ds_chosen->nr_documents + 1; i++) {
+    graph[i].DocumentId = i;
+    graph[i].adjacent_nodes = malloc(sizeof(LinkedList));
+    initialize_list(graph[i].adjacent_nodes, INTEGER);
+    graph[i].relevance_score = 0;
   }
 
-  regex_t regex;
-  regcomp(&regex, "\\[\\[([0-9]+)\\]\\]", REG_EXTENDED);
+  Node *d_node = d->head;
+  Document *document = NULL;
 
-  for (int i = 0; i < n; i++) {
-    Document *doc = (Document *)get_item(*documents, i);
-    char *body = doc->body;
+  while (d_node) {
+    document = (Document *)d_node->value;
 
-    regmatch_t matches[2];
-    char *cursor = body;
+    Node *l_node = document->links->head;
+    DocumentLink *dl = NULL;
 
-    while (regexec(&regex, cursor, 2, matches, 0) == 0) {
-      int start = matches[1].rm_so;
-      int end = matches[1].rm_eo;
+    while (l_node) {
+      dl = (DocumentLink *)l_node->value;
+      append(graph[dl->documentID].adjacent_nodes, &(document->DocumentId));
+      graph[dl->documentID].relevance_score++;
+      l_node = l_node->next;
+    }
 
-      char number_str[10];
-      int len = end - start;
-      strncpy(number_str, cursor + start, len);
-      number_str[len] = '\0';
+    d_node = d_node->next;
+  }
 
-      int referenced_id = atoi(number_str);
-      append(graph->edges[doc->DocumentId], &referenced_id);
+  bool show_items = true;
 
-      cursor += matches[0].rm_eo;
+  // sort by relevance score
+  for (int i = 1; i < ds_chosen->nr_documents + 1; i++) {
+    for (int j = ds_chosen->nr_documents; j >= i; j--) {
+      if (graph[j].relevance_score > graph[j - 1].relevance_score) {
+        LinkNode aux = graph[j];
+        graph[j] = graph[j - 1];
+        graph[j - 1] = aux;
+      }
     }
   }
 
-  regfree(&regex);
+  show_graph(graph, show_items);
+
   return graph;
 }
 
-void free_document_graph(DocumentGraph *graph) {
-  for (int i = 0; i < graph->num_nodes; i++) {
-    free_list(graph->edges[i]);
+void show_graph(LinkNode *graph, bool show_items) {
+  for (int i = 0; i < ds_chosen->nr_documents + 1; i++) {
+    printf("Document with id %d has relevance score of %d\n",
+           graph[i].DocumentId, graph[i].relevance_score);
+    if (show_items)
+      show_list(*graph[i].adjacent_nodes);
   }
-  free(graph->edges);
+}
+
+void free_graph(LinkNode *graph) {
+  for (int i = 0; i < ds_chosen->nr_documents + 1; i++) {
+    free_list(graph[i].adjacent_nodes);
+    free(graph[i].adjacent_nodes);
+  }
   free(graph);
 }

@@ -7,7 +7,7 @@
 #define Query LinkedList
 #define Stack LinkedList
 
-typedef enum { INTEGER, STRING, DOCUMENT_STR } DataType;
+typedef enum { INTEGER, STRING, DOCUMENT_STR, DOCUMENT_LINK } DataType;
 
 typedef struct _Node {
   void *value;
@@ -31,10 +31,9 @@ void initialize_list(LinkedList *l, DataType dt);
 
 Node *get_node(LinkedList l, int index);
 void *get_item(LinkedList l, int index);
-void delete (LinkedList *l, int index);
+void delete(LinkedList *l, int index);
 int get_length(LinkedList l);
-bool in_list(LinkedList l, void *value);
 void free_list(LinkedList *l);
-
+bool in_list(LinkedList l, void *value);
 
 #endif

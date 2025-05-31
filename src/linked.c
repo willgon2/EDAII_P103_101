@@ -200,6 +200,13 @@ void delete(LinkedList *l, int item_index) {
   } else if (l->type_of_variable == DOCUMENT_LINK) {
     free(((DocumentLink *)node->value)->title);
   }
+
+  // for debugging 
+
+  if (l->type_of_variable == STRING) {
+    printf("Deliting the string %s\n", (char *)node->value);
+  }
+
   free(node->value);
   free(node);
 }

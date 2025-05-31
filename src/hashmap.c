@@ -197,6 +197,6 @@ HashMap *create_hashmap_dataset(LinkedList documents) {
     d_node = d_node->next;
   }
 
-  //print_hashmap(*h);
+  // print_hashmap(*h);
   return h;
 }

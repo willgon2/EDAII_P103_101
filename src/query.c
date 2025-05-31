@@ -90,7 +90,7 @@ void score_documents(LinkNode *graph, LinkedList documents,
   printf("Pointer to count is %p\n", count);
   printf("i = %d, &i = %p\n", i, &i);
 
-  count = 13;
+  *count = i;
   printf("Pointer to count is %p\n", count);
 }
 

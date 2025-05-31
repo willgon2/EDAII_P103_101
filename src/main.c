@@ -38,7 +38,14 @@ int main() {
   fgets(input, 200, stdin);
 
   while (strlen(input) > 1) {
-    ranked_query(h, graph, input);
+  int count = 0;
+  int *top5 = ranked_query(h, graph, input, &count);
+
+    if (top5 != NULL) {
+      for (int i = 0; i < count; i++){
+        printf("Found relevant ID %d\n", top5[i]);
+      }
+    }
 
     printf("Search: ");
     fgets(input, 200, stdin);

@@ -12,50 +12,59 @@ void createaleak() {
   printf("Allocated leaking string: %s", foo);
 }
 
-int main() {
-  printf("*****************\nWelcome to EDA 2!\n*****************\n");
+int main(void)
+{
+    start_database();
 
-  // how to import and call a function
-  // printf("Factorial of 4 is %d\n", fact(4));
+    LinkedList *files   = get_files(WIKIPEDIA12);     // all docs
+    HashMap    *index   = create_hashmap_dataset(*files);
+    LinkNode   *graph   = create_score_graph(files);
 
-  // uncomment and run "make v" to see how valgrind detects memory leaks
-  // createaleak();
+    char input[256];
 
-  start_database();
+    while (1) {
+        printf("\nSearch (or 'exit'): ");
+        if (!fgets(input, sizeof input, stdin)) break;
+        if (strncmp(input, "exit", 4) == 0) break;
 
-  LinkedList *files = get_files(WIKIPEDIA12);
-  LinkNode *graph = create_score_graph(files);
+        /* strip trailing newline */
+        input[strcspn(input, "\n")] = '\0';
 
-  LinkedList document_title;
-  initialize_list(&document_title, STRING);
+        int count = 0;
+        int *top  = ranked_query(index, graph, input, &count);
 
-  HashMap *h = create_hashmap_dataset(*files);
+        if (count == 0) { free(top); continue; }
 
-  int max_input = 200;
-  char input[max_input];
+        /* show titles */
+        printf("\n=== Top results ===\n");
+        for (int i = 0; i < count; ++i) {
+            Document *d = find_document_by_id(*files, top[i]);
+            if (d) printf("[%d] %s\n", d->DocumentId, d->title);
+        }
 
-  printf("Search: ");
-  fgets(input, 200, stdin);
+        /* choose one */
+        printf("\nEnter an ID to open (or just press Enter to skip): ");
+        char buf[32];
+        fgets(buf, sizeof buf, stdin);
+        if (buf[0] != '\n') {
+            int id = atoi(buf);
+            Document *d = find_document_by_id(*files, id);
+            if (d) {
+                printf("\n---- %s (ID %d) ----\n", d->title, d->DocumentId);
+                puts(d->body);            /* full body; or print first N lines */
+                printf("---------------------------\n");
+            } else {
+                printf("No document with ID %d\n", id);
+            }
+        }
 
-  while (strlen(input) > 1) {
-  int count = 0;
-  int *top5 = ranked_query(h, graph, input, &count);
-
-    if (top5 != NULL) {
-      for (int i = 0; i < count; i++){
-        printf("Found relevant ID %d\n", top5[i]);
-      }
+        free(top);
     }
 
-    printf("Search: ");
-    fgets(input, 200, stdin);
-  }
-
-  free_list(files);
-  free(files);
-  free_hashmap(h);
-  free_graph(graph);
-  free_database();
-
-  return 0;
+    /* tidy up … */
+    free_list(files); free(files);
+    free_hashmap(index);
+    free_graph(graph);
+    free_database();
+    return 0;
 }

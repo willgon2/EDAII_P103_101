@@ -16,20 +16,13 @@ char *copy_str(char *old_str) {
 }
 
 int get_length(LinkedList l) {
-  if (l.is_empty == true) {
-    return 0;
-  }
-
   int i = 0;
-  Node *node = l.head;
-
-  while (node != l.tail) {
-    i++;
-    node = node->next;
+  for (Node *node = l.head; node != NULL; node = node->next) {
+      i++;
   }
-
   return i;
 }
+
 
 Node *create_node(void *value, DataType dt) {
   Node *n = malloc(sizeof(Node));

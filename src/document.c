@@ -177,3 +177,12 @@ void free_database() {
     free(database[i].path);
   }
 }
+
+Document *find_document_by_id(LinkedList docs, int id)
+{
+    for (Node *n = docs.head; n != NULL; n = n->next) {
+        Document *d = (Document *)n->value;
+        if (d->DocumentId == id) return d;
+    }
+    return NULL;           /* not found */
+}

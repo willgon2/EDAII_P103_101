@@ -31,18 +31,8 @@ int main() {
 
   HashMap *h = create_hashmap_dataset(*files);
 
-  int max_input = 200;
-  char input[max_input];
-
-  printf("Search: ");
-  fgets(input, 200, stdin);
-
-  while (strlen(input) > 1) {
-    ranked_query(h, graph, input);
-
-    printf("Search: ");
-    fgets(input, 200, stdin);
-  }
+  char *input = "Hello world this is a test";
+  ranked_query(h, graph, input);
 
   free_list(files);
   free(files);

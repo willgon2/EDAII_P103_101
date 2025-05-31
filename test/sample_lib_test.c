@@ -1,5 +1,9 @@
 #include "../src/sample_lib.h"
 #include "utils.h"
+#include "linked.h"
+#include "search.h"
+#include "document.h"
+#include "hashmap.h"
 
 void test_fact4() {
   runningtest("test_fact4");
@@ -42,6 +46,22 @@ void sample_lib_test() {
     test_fact4();
     test_fact3();
     test_fact2();
+    search_query_test();
   }
   success();
 }
+
+
+/*void search_query_test(){
+  LinkedList doc_list = start_database();
+  HashMap *index = create_hashmap_dataset(doc_list);
+  int found1[2] = search_query(index,"circe");
+  assertEqualsInt(found, )
+
+
+
+  free_hashmap(index);
+  free_list(&doc_list); 
+
+
+}*/

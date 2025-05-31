@@ -5,7 +5,6 @@
 #include "document.h"
 #include "linked.h"
 
-
 typedef struct KeyValuePair {
   char *key;
   LinkedList documents;
@@ -27,7 +26,5 @@ HashMap *create_hashmap_dataset(LinkedList documents);
 LinkedList split(char *string);
 void rehash(HashMap *h, int capacity);
 void initialize_hashmap_cap(HashMap *h, int capacity);
-    
-
 
 #endif

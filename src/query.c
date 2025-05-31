@@ -114,7 +114,8 @@ void sort_results(RankedResult results[], int count) {
   }
 }
 
-int * ranked_query(HashMap *index, LinkNode *graph, const char *input, int *count) {
+int *ranked_query(HashMap *index, LinkNode *graph, const char *input,
+                  int *count) {
   LinkedList words, documents, documentSet;
 
   initialize_list(&words, STRING);
@@ -136,7 +137,7 @@ int * ranked_query(HashMap *index, LinkNode *graph, const char *input, int *coun
 
   int *top5 = NULL;
   if (len != 0) {
-    top5 = malloc(5*sizeof(int));
+    top5 = malloc(5 * sizeof(int));
     memset(top5, 0, 5 * sizeof(int));
 
     RankedResult results[len];
@@ -149,21 +150,21 @@ int * ranked_query(HashMap *index, LinkNode *graph, const char *input, int *coun
     sort_results(results, *count);
 
     printf("Top relevant documents:\n");
-    
-    if (*count >= 5) *count = 5;
+
+    if (*count >= 5)
+      *count = 5;
 
     for (int i = 0; i < *count; i++) {
       printf("Document ID: %d (Relevance Score: %d; Query score: %d)\n",
-            results[i].docID, results[i].relevanceScore, results[i].queryScore);
+             results[i].docID, results[i].relevanceScore,
+             results[i].queryScore);
 
-        top5[i] = results[i].docID;
+      top5[i] = results[i].docID;
     }
   } else {
     printf("No matching documents found!\n");
   }
 
-
-  
   free_list(&words);
   free_list(&documents);
   free_list(&documentSet);

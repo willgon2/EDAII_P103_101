@@ -3,14 +3,6 @@
 #include <stdio.h>
 
 int main() {
-  {
-    
-    
-    
-    
-
-
-    sample_lib_test();
-  }
+  { sample_lib_test(); }
   allsuccess();
 }

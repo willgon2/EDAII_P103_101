@@ -1,8 +1,7 @@
 #include "hashmap.h"
 
-static int  next_pow2(int v);
+static int next_pow2(int v);
 void initialize_hashmap_cap(HashMap *h, int capacity);
-
 
 /*void initialize_hashmap(HashMap *h) {
   h->size = 0;
@@ -164,9 +163,9 @@ void rehash(HashMap *h, int capacity) {
 }
 
 HashMap *create_hashmap_dataset(LinkedList documents) {
-    HashMap *h = malloc(sizeof(HashMap));
-    int cap_hint = next_pow2(ds_chosen->nr_documents * 32);
-    initialize_hashmap_cap(h, cap_hint);
+  HashMap *h = malloc(sizeof(HashMap));
+  int cap_hint = next_pow2(ds_chosen->nr_documents * 32);
+  initialize_hashmap_cap(h, cap_hint);
 
   Node *d_node = documents.head;
 
@@ -206,19 +205,23 @@ HashMap *create_hashmap_dataset(LinkedList documents) {
 }
 
 /* helper ───────────────────────────────────────────────*/
-static int next_pow2(int v) {          /* smallest  power-of-2 ≥ v */
-    v--;  v |= v>>1; v |= v>>2; v |= v>>4; v |= v>>8; v |= v>>16;
-    return v + 1;
+static int next_pow2(int v) { /* smallest  power-of-2 ≥ v */
+  v--;
+  v |= v >> 1;
+  v |= v >> 2;
+  v |= v >> 4;
+  v |= v >> 8;
+  v |= v >> 16;
+  return v + 1;
 }
 
 /* existing initialise stays but calls the new one for default */
 void initialize_hashmap(HashMap *h) { initialize_hashmap_cap(h, 4); }
 
 /* NEW: one-shot allocate */
-void initialize_hashmap_cap(HashMap *h, int capacity)
-{
-    capacity = next_pow2(capacity < 4 ? 4 : capacity);
-    h->size = 0;
-    h->capacity = capacity;
-    h->buckets = calloc(capacity, sizeof(KeyValuePair));
+void initialize_hashmap_cap(HashMap *h, int capacity) {
+  capacity = next_pow2(capacity < 4 ? 4 : capacity);
+  h->size = 0;
+  h->capacity = capacity;
+  h->buckets = calloc(capacity, sizeof(KeyValuePair));
 }

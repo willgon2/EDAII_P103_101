@@ -1,12 +1,16 @@
 #include "hashmap.h"
 
-void initialize_hashmap(HashMap *h) {
+static int  next_pow2(int v);
+void initialize_hashmap_cap(HashMap *h, int capacity);
+
+
+/*void initialize_hashmap(HashMap *h) {
   h->size = 0;
   h->capacity = 4;
   int size_memory = h->capacity * sizeof(KeyValuePair);
   h->buckets = malloc(size_memory);
   memset(h->buckets, 0, size_memory);
-}
+} */
 
 uint32_t djb2_hash(const char *key) {
   uint32_t hash = 5381;
@@ -70,8 +74,7 @@ void hashmap_add(HashMap *h, char *word, int documentID) {
     pair->key = copy_str(word);
     h->size++;
   } else {
-    if (!in_list(pair->documents, &documentID))
-      append(&pair->documents, &documentID);
+    append(&pair->documents, &documentID);
   }
 }
 
@@ -161,8 +164,9 @@ void rehash(HashMap *h, int capacity) {
 }
 
 HashMap *create_hashmap_dataset(LinkedList documents) {
-  HashMap *h = malloc(sizeof(HashMap));
-  initialize_hashmap(h);
+    HashMap *h = malloc(sizeof(HashMap));
+    int cap_hint = next_pow2(ds_chosen->nr_documents * 32);
+    initialize_hashmap_cap(h, cap_hint);
 
   Node *d_node = documents.head;
 
@@ -199,4 +203,22 @@ HashMap *create_hashmap_dataset(LinkedList documents) {
 
   // print_hashmap(*h);
   return h;
+}
+
+/* helper ───────────────────────────────────────────────*/
+static int next_pow2(int v) {          /* smallest  power-of-2 ≥ v */
+    v--;  v |= v>>1; v |= v>>2; v |= v>>4; v |= v>>8; v |= v>>16;
+    return v + 1;
+}
+
+/* existing initialise stays but calls the new one for default */
+void initialize_hashmap(HashMap *h) { initialize_hashmap_cap(h, 4); }
+
+/* NEW: one-shot allocate */
+void initialize_hashmap_cap(HashMap *h, int capacity)
+{
+    capacity = next_pow2(capacity < 4 ? 4 : capacity);
+    h->size = 0;
+    h->capacity = capacity;
+    h->buckets = calloc(capacity, sizeof(KeyValuePair));
 }

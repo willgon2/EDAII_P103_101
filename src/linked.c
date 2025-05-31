@@ -37,40 +37,42 @@ Node *create_node(void *value, DataType dt) {
   n->prev = NULL;
 
   switch (dt) {
-  case INTEGER:
-    int *p_value = malloc(sizeof(int));
-    *p_value = *(int *)value;
+    case INTEGER: {
+      int *p_value = malloc(sizeof(int));
+      *p_value = *(int *)value;
+      n->value = p_value;
+      break;
+    }
 
-    n->value = p_value;
-    break;
+    case STRING: {
+      char *text = copy_str((char *)value);
+      n->value = text;
+      break;
+    }
 
-  case STRING:
-    char *text = copy_str((char *)value);
+    case DOCUMENT_STR: {
+      Document *p_document = malloc(sizeof(Document));
+      *p_document = *(Document *)value;
+      n->value = p_document;
+      break;
+    }
 
-    n->value = text;
-    break;
+    case DOCUMENT_LINK: {
+      DocumentLink *l = malloc(sizeof(DocumentLink));
+      *l = *(DocumentLink *)value;
+      n->value = l;
+      break;
+    }
 
-  case DOCUMENT_STR:
-    Document *p_document = malloc(sizeof(Document));
-    *p_document = *(Document *)value;
-
-    n->value = p_document;
-    break;
-
-  case DOCUMENT_LINK:
-    DocumentLink *l = malloc(sizeof(DocumentLink));
-    *l = *(DocumentLink *)value;
-
-    n->value = l;
-    break;
-
-  default:
-    printf("The datatype introduced is not available\n");
-    exit(1);
-    break;
+    default: {
+      printf("The datatype introduced is not available\n");
+      exit(1);
+    }
   }
+
   return n;
 }
+
 
 void initialize_list(LinkedList *l, DataType dt) {
   l->head = NULL;

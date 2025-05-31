@@ -16,7 +16,7 @@ int main(void)
 {
     start_database();
 
-    LinkedList *files   = get_files(WIKIPEDIA12);     // all docs
+    LinkedList *files   = get_files(WIKIPEDIA540);     // all docs
     HashMap    *index   = create_hashmap_dataset(*files);
     LinkNode   *graph   = create_score_graph(files);
 

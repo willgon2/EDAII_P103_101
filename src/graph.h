@@ -6,9 +6,9 @@
 #include "linked.h"
 
 typedef struct LinkNode {
-    int DocumentId;
-    LinkedList *adjacent_nodes;
-    int relevance_score;
+  int DocumentId;
+  LinkedList *adjacent_nodes;
+  int relevance_score;
 } LinkNode;
 
 LinkNode *create_score_graph(LinkedList *d);

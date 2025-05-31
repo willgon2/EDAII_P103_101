@@ -37,41 +37,40 @@ Node *create_node(void *value, DataType dt) {
   n->prev = NULL;
 
   switch (dt) {
-    case INTEGER: {
-      int *p_value = malloc(sizeof(int));
-      *p_value = *(int *)value;
-      n->value = p_value;
-      break;
-    }
+  case INTEGER:
+    int *p_value = malloc(sizeof(int));
+    *p_value = *(int *)value;
 
-    case STRING: {
-      char *text = copy_str((char *)value);
-      n->value = text;
-      break;
-    }
+    n->value = p_value;
+    break;
 
-    case DOCUMENT_STR: {
-      Document *p_document = malloc(sizeof(Document));
-      *p_document = *(Document *)value;
-      n->value = p_document;
-      break;
-    }
+  case STRING:
+    char *text = copy_str((char *)value);
 
-    case DOCUMENT_LINK: {
-      DocumentLink *l = malloc(sizeof(DocumentLink));
-      *l = *(DocumentLink *)value;
-      n->value = l;
-      break;
-    }
+    n->value = text;
+    break;
 
-    default:
-      printf("The datatype introduced is not available\n");
-      exit(1);
+  case DOCUMENT_STR:
+    Document *p_document = malloc(sizeof(Document));
+    *p_document = *(Document *)value;
+
+    n->value = p_document;
+    break;
+
+  case DOCUMENT_LINK:
+    DocumentLink *l = malloc(sizeof(DocumentLink));
+    *l = *(DocumentLink *)value;
+
+    n->value = l;
+    break;
+
+  default:
+    printf("The datatype introduced is not available\n");
+    exit(1);
+    break;
   }
-
   return n;
 }
-
 
 void initialize_list(LinkedList *l, DataType dt) {
   l->head = NULL;
@@ -127,8 +126,8 @@ void show_list(LinkedList l) {
       printf("\n");
       break;
     case DOCUMENT_LINK:
-        printf("%d ", ((DocumentLink*)node->value)->documentID);
-        break;
+      printf("%d ", ((DocumentLink *)node->value)->documentID);
+      break;
     default:
       printf("Error: Data type not found!!\n");
       exit(1);
@@ -200,8 +199,7 @@ void delete(LinkedList *l, int item_index) {
     free(((Document *)node->value)->links);
   } else if (l->type_of_variable == DOCUMENT_LINK) {
     free(((DocumentLink *)node->value)->title);
-  } 
-
+  }
   free(node->value);
   free(node);
 }
@@ -225,7 +223,8 @@ bool in_list(LinkedList l, void *value) {
         return true;
       }
     } else if (l.type_of_variable == DOCUMENT_LINK) {
-      DocumentLink *l = (DocumentLink *) n->value, *l_value = (DocumentLink *)value;
+      DocumentLink *l = (DocumentLink *)n->value,
+                   *l_value = (DocumentLink *)value;
       if (l->documentID == l_value->documentID) {
         return true;
       }

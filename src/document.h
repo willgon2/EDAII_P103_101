@@ -30,7 +30,7 @@ typedef struct DatasetInfo {
   int nr_documents;
 } DatasetInfo;
 
-extern DatasetInfo * ds_chosen;
+extern DatasetInfo *ds_chosen;
 
 void start_database();
 void add_dataset(Dataset ds, char *path, int nr_documents);

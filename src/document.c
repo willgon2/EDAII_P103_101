@@ -49,7 +49,6 @@ LinkedList *get_files(Dataset ds) {
   return documents;
 }
 
-
 void get_links(Document *d) {
   int id = 0;
   int title_leangth = 100;
@@ -61,38 +60,39 @@ void get_links(Document *d) {
       i++;
 
       int title_index = 0;
-      while (d->body[i + 1] != '[' && d->body[i + 1] != ']' && i < (int)strlen(d->body)) {
+      while (d->body[i + 1] != '[' && d->body[i + 1] != ']' &&
+             i < (int)strlen(d->body)) {
         title[title_index] = d->body[i];
 
-        i++;title_index++;
+        i++;
+        title_index++;
 
         if (title_leangth <= title_index + 1) {
-          
+
           title_leangth += 100;
           title = realloc(title, title_leangth);
         }
       }
 
-
       title[title_index] = d->body[i];
       title[title_index + 1] = '\0';
 
-      if (d->body[i + 1] != ']' || i+1 >= (int)strlen(d->body)){
+      if (d->body[i + 1] != ']' || i + 1 >= (int)strlen(d->body)) {
         continue;
       }
 
-      if (d->body[i+2] != '(') {
+      if (d->body[i + 2] != '(') {
         continue;
       }
 
       i += 3;
 
-      while (d->body[i] >= '0' && d->body[i] >=0 && i < (int)strlen(d->body)) {
+      while (d->body[i] >= '0' && d->body[i] >= 0 && i < (int)strlen(d->body)) {
         id = id * 10 + (d->body[i] - '0');
         i++;
-      }  
+      }
 
-      if (d->body[i] != ')') 
+      if (d->body[i] != ')')
         continue;
 
       DocumentLink *l = malloc(sizeof(DocumentLink));

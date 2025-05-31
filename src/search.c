@@ -2,7 +2,7 @@
 
 Document *linear_search_title(LinkedList documents, char *title) {
   Node *d_node = documents.head;
-  Document *d = (Document *)d_node->value;  
+  Document *d = (Document *)d_node->value;
 
   while (d_node != NULL && strcmp(title, d->title)) {
     d_node = d_node->next;

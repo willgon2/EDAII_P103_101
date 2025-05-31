@@ -1,9 +1,10 @@
 #include "common.h"
 #include "document.h"
+#include "graph.h"
 #include "hashmap.h"
 #include "linked.h"
+#include "query.h"
 #include "sample_lib.h"
-#include "graph.h"
 #include "search.h"
 
 void createaleak() {
@@ -23,12 +24,15 @@ int main() {
   start_database();
 
   LinkedList *files = get_files(WIKIPEDIA12);
-  LinkNode *graph =  create_score_graph(files);
+  LinkNode *graph = create_score_graph(files);
 
   LinkedList document_title;
   initialize_list(&document_title, STRING);
 
   HashMap *h = create_hashmap_dataset(*files);
+
+  char *input = "Hello world this is a test";
+  ranked_query(h, graph, input);
 
   free_list(files);
   free(files);

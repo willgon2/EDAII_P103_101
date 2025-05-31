@@ -9,14 +9,14 @@ void initialize_hashmap(HashMap *h) {
 }
 
 uint32_t djb2_hash(const char *key) {
-    uint32_t hash = 5381;
-    int c;
+  uint32_t hash = 5381;
+  int c;
 
-    while ((c = *key++)) {
-        hash = ((hash << 5) + hash) + (uint8_t)c;
-    }
+  while ((c = *key++)) {
+    hash = ((hash << 5) + hash) + (uint8_t)c;
+  }
 
-    return hash;
+  return hash;
 }
 
 int create_hash(HashMap h, char *word) {
@@ -169,7 +169,8 @@ HashMap *create_hashmap_dataset(LinkedList documents) {
   while (d_node != NULL) {
     Document *d = (Document *)d_node->value;
     printf("Hashing document with id %d\n", d->DocumentId);
-    printf("The capacity of the hash table is: %d and the size is: %d\n", h->capacity, h->size);
+    printf("The capacity of the hash table is: %d and the size is: %d\n",
+           h->capacity, h->size);
 
     char *word = get_word(d->title);
 
@@ -196,6 +197,6 @@ HashMap *create_hashmap_dataset(LinkedList documents) {
     d_node = d_node->next;
   }
 
-  print_hashmap(*h);
+  //print_hashmap(*h);
   return h;
 }

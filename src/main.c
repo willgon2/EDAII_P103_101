@@ -16,7 +16,7 @@ int main(void)
 {
     start_database();
 
-    LinkedList *files   = get_files(WIKIPEDIA540);     // all docs
+    LinkedList *files   = get_files(WIKIPEDIA12);     // all docs
     HashMap    *index   = create_hashmap_dataset(*files);
     LinkNode   *graph   = create_score_graph(files);
 
@@ -27,7 +27,6 @@ int main(void)
         if (!fgets(input, sizeof input, stdin)) break;
         if (strncmp(input, "exit", 4) == 0) break;
 
-        /* strip trailing newline */
         input[strcspn(input, "\n")] = '\0';
 
         int count = 0;
@@ -35,14 +34,12 @@ int main(void)
 
         if (count == 0) { free(top); continue; }
 
-        /* show titles */
         printf("\n=== Top results ===\n");
         for (int i = 0; i < count; ++i) {
             Document *d = find_document_by_id(*files, top[i]);
             if (d) printf("[%d] %s\n", d->DocumentId, d->title);
         }
 
-        /* choose one */
         printf("\nEnter an ID to open (or just press Enter to skip): ");
         char buf[32];
         fgets(buf, sizeof buf, stdin);
@@ -51,7 +48,7 @@ int main(void)
             Document *d = find_document_by_id(*files, id);
             if (d) {
                 printf("\n---- %s (ID %d) ----\n", d->title, d->DocumentId);
-                puts(d->body);            /* full body; or print first N lines */
+                puts(d->body);
                 printf("---------------------------\n");
             } else {
                 printf("No document with ID %d\n", id);
@@ -61,7 +58,6 @@ int main(void)
         free(top);
     }
 
-    /* tidy up … */
     free_list(files); free(files);
     free_hashmap(index);
     free_graph(graph);

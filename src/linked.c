@@ -18,11 +18,10 @@ char *copy_str(char *old_str) {
 int get_length(LinkedList l) {
   int i = 0;
   for (Node *node = l.head; node != NULL; node = node->next) {
-      i++;
+    i++;
   }
   return i;
 }
-
 
 Node *create_node(void *value, DataType dt) {
   Node *n = malloc(sizeof(Node));
@@ -30,42 +29,41 @@ Node *create_node(void *value, DataType dt) {
   n->prev = NULL;
 
   switch (dt) {
-    case INTEGER: {
-      int *p_value = malloc(sizeof(int));
-      *p_value = *(int *)value;
-      n->value = p_value;
-      break;
-    }
+  case INTEGER: {
+    int *p_value = malloc(sizeof(int));
+    *p_value = *(int *)value;
+    n->value = p_value;
+    break;
+  }
 
-    case STRING: {
-      char *text = copy_str((char *)value);
-      n->value = text;
-      break;
-    }
+  case STRING: {
+    char *text = copy_str((char *)value);
+    n->value = text;
+    break;
+  }
 
-    case DOCUMENT_STR: {
-      Document *p_document = malloc(sizeof(Document));
-      *p_document = *(Document *)value;
-      n->value = p_document;
-      break;
-    }
+  case DOCUMENT_STR: {
+    Document *p_document = malloc(sizeof(Document));
+    *p_document = *(Document *)value;
+    n->value = p_document;
+    break;
+  }
 
-    case DOCUMENT_LINK: {
-      DocumentLink *l = malloc(sizeof(DocumentLink));
-      *l = *(DocumentLink *)value;
-      n->value = l;
-      break;
-    }
+  case DOCUMENT_LINK: {
+    DocumentLink *l = malloc(sizeof(DocumentLink));
+    *l = *(DocumentLink *)value;
+    n->value = l;
+    break;
+  }
 
-    default: {
-      printf("The datatype introduced is not available\n");
-      exit(1);
-    }
+  default: {
+    printf("The datatype introduced is not available\n");
+    exit(1);
+  }
   }
 
   return n;
 }
-
 
 void initialize_list(LinkedList *l, DataType dt) {
   l->head = NULL;
@@ -196,7 +194,7 @@ void delete(LinkedList *l, int item_index) {
     free(((DocumentLink *)node->value)->title);
   }
 
-  // for debugging 
+  // for debugging
 
   if (l->type_of_variable == STRING) {
     printf("Deliting the string %s\n", (char *)node->value);

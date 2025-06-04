@@ -33,7 +33,6 @@ typedef struct DatasetInfo {
 extern DatasetInfo *ds_chosen;
 Document *find_document_by_id(LinkedList docs, int id);
 
-
 void start_database();
 void add_dataset(Dataset ds, char *path, int nr_documents);
 LinkedList *get_files(Dataset ds);

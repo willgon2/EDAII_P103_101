@@ -1,6 +1,6 @@
 # Report: Building a search engine like Google
 
-![Document Flowchart](diagram.png)
+![Document Flowchart](diagram.jpeg)
 
 # Memory Management
 
